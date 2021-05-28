@@ -1,4 +1,4 @@
-package com.cfww.croiffle;
+package com.cfww.croiffle.config;
 
 import org.springframework.core.Ordered;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -18,12 +18,13 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        // /에 해당하는 url mapping을 /common/test로 forward한다.
-        registry.addViewController( "/" ).setViewName( "forward:/index" );
+        // /login 이라고 요청이 들어오면 forward:/index를 뷰 리졸버로 보내준다
+        registry.addViewController( "/login" ).setViewName( "forward:/index" );
         // 우선순위를 가장 높게 잡는다.
         registry.setOrder(Ordered.HIGHEST_PRECEDENCE); }
 
-    @Override public void addResourceHandlers(ResourceHandlerRegistry registry) {
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/**").addResourceLocations(CLASSPATH_RESOURCE_LOCATIONS);
     }
 
