@@ -6,6 +6,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.savedrequest.RequestCacheAwareFilter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,3 +26,11 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     }
 
 }
+
+// 이런식으로 filter를 추가할 수 있음.
+//@Log4j2
+//public class TestAuthenticationFilter extends RequestCacheAwareFilter {
+//    public TestAuthenticationFilter(AuthenticationManager authenticationManager) {
+////        super.set
+//}
+//}
