@@ -1,4 +1,4 @@
-package com.cfww.croiffle;
+package com.cfww.croiffle.service;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

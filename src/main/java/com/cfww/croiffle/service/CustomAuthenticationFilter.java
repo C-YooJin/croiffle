@@ -1,4 +1,4 @@
-package com.cfww.croiffle;
+package com.cfww.croiffle.service;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.authentication.AuthenticationManager;
