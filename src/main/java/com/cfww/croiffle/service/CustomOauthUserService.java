@@ -35,7 +35,6 @@ public class CustomOauthUserService implements OAuth2UserService<OAuth2UserReque
                 .attributes(attributes)
                 .nameAttributeKey(nameAttributeKey)
                 .build();
-
     }
 
 }
