@@ -19,7 +19,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     }
 
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+    public Authentication attemptAuthentication(final HttpServletRequest request, final HttpServletResponse response) throws AuthenticationException {
         UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(request.getParameter("userEmail"), request.getParameter("userPw"));
         setDetails(request, authRequest);
         return this.getAuthenticationManager().authenticate(authRequest);
@@ -27,10 +27,3 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
 }
 
-// 이런식으로 filter를 추가할 수 있음.
-//@Log4j2
-//public class TestAuthenticationFilter extends RequestCacheAwareFilter {
-//    public TestAuthenticationFilter(AuthenticationManager authenticationManager) {
-////        super.set
-//}
-//}

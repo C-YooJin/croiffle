@@ -4,6 +4,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
@@ -42,7 +44,11 @@ public class JwtTokenProvider {
                 // signature 에 들어갈 secret값 세팅
                 .compact();
     }
+//
+//    public Authentication getAuthentication(String token) {
+//        UserDetails userDetails = new UserDetailsService().loadUserByUsername()
+//    }
 
 
-    
+
 }

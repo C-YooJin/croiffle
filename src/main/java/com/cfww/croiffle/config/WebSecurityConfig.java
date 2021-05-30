@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -41,7 +42,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(authenticationProvider);
     }
 
-    // 정적 자원에 대해서는 security 지원하지 않음
+    /** 정적 자원에 대해서는 security 지원하지 않음 */
     @Override
     public void configure(WebSecurity web){
         web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
@@ -54,7 +55,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         /** 기본 인증 설정 */
         http.csrf().disable().authorizeRequests()
                 // 아래 요청에 대해서는 모두가 접근할 수 있음
-                .antMatchers("/", "/signin/**", "/signup/**").permitAll()
+//                .antMatchers("/", "/signin/**", "/signup/**").permitAll()
                 // /about 요청에 대해서는 로그인을 요구함
                 .antMatchers("/about").hasRole("BUYER")
                 // /admin 요청에 대해서는 ROLE_ADMIN 역할을 가지고 있어야 함. Role.enum 파일과 매칭 돼야 함.
@@ -65,19 +66,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().permitAll()
                 .and()
                 .addFilter(jwtAuthenticationFilter())
-                .addFilter(jwtAuthorizationFilter())
-                // 로그인하는 경우에 대해 설정함
-                .formLogin()
-                // 로그인 페이지를 제공하는 URL을 설정함
-                .loginPage("/user/loginView")
-                // 로그인 성공 URL을 설정함 -> 브로커, 바이어 달라야 됨 (수정)
-                .successForwardUrl("/index")
-                // 로그인 실패 URL을 설정함
-                .failureForwardUrl("/index")
-                .permitAll()
-                .and()
-                .addFilterBefore(customAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-
+//                .addFilter(jwtAuthorizationFilter())
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.httpBasic();
         http.logout()
@@ -90,8 +80,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         jwtAuthenticationFilter.setFilterProcessesUrl("/login");
         jwtAuthenticationFilter.setUsernameParameter("username");
         jwtAuthenticationFilter.setPasswordParameter("password");
-        jwtAuthenticationFilter.setAuthenticationSuccessHandler(authenticationSuccessHandler());
-        jwtAuthenticationFilter.setAuthenticationFailureHandler(authenticationFailureHandler());
+//        jwtAuthenticationFilter.setAuthenticationSuccessHandler(authenticationSuccessHandler());
+//        jwtAuthenticationFilter.setAuthenticationFailureHandler(authenticationFailureHandler());
         jwtAuthenticationFilter.afterPropertiesSet();
         return jwtAuthenticationFilter;
 
