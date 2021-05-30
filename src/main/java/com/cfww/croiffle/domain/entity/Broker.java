@@ -1,10 +1,7 @@
 package com.cfww.croiffle.domain.entity;
 
 import com.cfww.croiffle.Role;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -16,7 +13,7 @@ public class Broker extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "broker_id")
+    @Column(name = "broker_id", length = 20)
     private Long id;
 
     @Column(unique = true, nullable = false)
@@ -39,6 +36,7 @@ public class Broker extends BaseTimeEntity {
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private Role role;
+
 
 
 }

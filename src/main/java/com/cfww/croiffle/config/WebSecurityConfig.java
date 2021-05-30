@@ -2,6 +2,7 @@ package com.cfww.croiffle.config;
 
 import com.cfww.croiffle.service.CustomAuthenticationFilter;
 import com.cfww.croiffle.service.CustomLoginSuccessHandler;
+import com.cfww.croiffle.service.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -49,7 +50,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     // form기반의 로그인을 활용하는 경우 로그인 url, 로그인 성공시 url, 로그인 실패 url등을 설정
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.addFilterAfter(jwtAuthenticationFilter, LogoutFilter.class);
 
         /** 기본 인증 설정 */
         http.csrf().disable().authorizeRequests()
@@ -64,6 +64,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // .anyRequest().authenticated() 이렇게 쓰면 나머지 리퀘스트에 대해서 로그인을 요한다는 뜻
                 .anyRequest().permitAll()
                 .and()
+                .addFilter(jwtAuthenticationFilter())
+                .addFilter(jwtAuthorizationFilter())
                 // 로그인하는 경우에 대해 설정함
                 .formLogin()
                 // 로그인 페이지를 제공하는 URL을 설정함
@@ -76,32 +78,32 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .addFilterBefore(customAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
-        /** 예외처리 */
-        http.exceptionHandling()
-                .authenticationEntryPoint(configAuthenticationEntryPoint())
-                .accessDeniedHandler(configAccessDeniedHandler());
-
-
-        /** OAuth 2.0 로그인 관련 처리 */
-        http.oauth2Login()
-                .userInfoEndpoint().userService(customOAuth2UserService)
-                .and()
-                .successHandler(configSuccessHandler())
-                .failureHandler(configFailureHandler())
-                .permitAll();
 
         http.httpBasic();
         http.logout()
                 .deleteCookies("JSESSIONID");
     }
 
-    /** SuccessHandler bean register */
     @Bean
-    public AuthenticationSuccessHandler authenticationSuccessHandler() {
-        CustomAuthenticationSuccessHandler successHandler = new CustomAuthenticationSuccessHandler();
-        successHandler.setDefaultTargetUrl("/index");
-        return successHandler;
+    public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
+        JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager());
+        jwtAuthenticationFilter.setFilterProcessesUrl("/login");
+        jwtAuthenticationFilter.setUsernameParameter("username");
+        jwtAuthenticationFilter.setPasswordParameter("password");
+        jwtAuthenticationFilter.setAuthenticationSuccessHandler(authenticationSuccessHandler());
+        jwtAuthenticationFilter.setAuthenticationFailureHandler(authenticationFailureHandler());
+        jwtAuthenticationFilter.afterPropertiesSet();
+        return jwtAuthenticationFilter;
+
     }
+
+//    /** SuccessHandler bean register */
+//    @Bean
+//    public AuthenticationSuccessHandler authenticationSuccessHandler() {
+//        CustomAuthenticationSuccessHandler successHandler = new CustomAuthenticationSuccessHandler();
+//        successHandler.setDefaultTargetUrl("/index");
+//        return successHandler;
+//    }
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
