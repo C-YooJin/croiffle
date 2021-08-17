@@ -1,6 +1,6 @@
 # croiffle
-Spring web service
+Spring web service(ssr)
 
 Spring boot
-vue.js
-postgresql
+JPA
+thymeleaf
